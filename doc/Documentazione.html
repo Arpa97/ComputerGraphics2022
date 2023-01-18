@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentazione</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html">
+    <h1 id="descrizione-dellapplicazione-e-suo-utilizzo">Descrizione dell’applicazione e suo utilizzo</h1>
+  <p>La mucca Carolina si è stancata di dare tutto il suo latte al mandriano Andrea, e vuole recuperarlo.<br>
+  Aiuta Carolina a riprendere il suo prezioso latte rubato, ma fai attenzione al cattivo allevatore!<br>
+  Se ti prende, diventerai una braciola!</p>
+  <p>
+    Il gioco ha come scopo quello di raccogliere i barili di latte sparsi nella mappa, scappando dalla sfera
+    che rappresenta l'allevatore. Ma attenzione! Se esci dalla mappa, farai una brutta fine!
+  </p>
+<h1 id="spiegazione-delle-scelte-effettuate-e-funzionalità-di-webgl-utilizzate">Spiegazione delle scelte effettuate e funzionalità di WebGl utilizzate</h1>
+<p>Per la realizzazione della scena, sono state utilizzate diverse tecniche.</p>
+<h2>Oggetti 3D</h2>
+<p>La skybox è stata realizzata tramite un cubo a cui sono state applicate delle texture e una visione prospettica che hanno lo scopo di restituire la sensazione di un mondo infinito.</p>
+<p>L’ambiente è stato poi reso “vivo” creando un piano con l’applicazione della texture di un prato cercando di rendere l’idea di un ambiente aperto.</p>
+<p>La dimensione di piano e mappa coincidono, infatti l’uscita dal piano corrisponde alla schermata di “game over” che permette al giocatore di riprovare con l’ausilio di un bottone di “retry”.</p>
+<p>La scena è composta da diverse Mesh che vengono importate da altrettanti file in formato Wavefront OBJ.</p>
+<p>La mesh della mucca era molto complessa (reperita dal sito <a href="http://free3d.com">free3d.com</a>) e per permettere il caricamento sull’applicazione, ho ridotto il numero di poligoni con l’ausilio del software Blender.</p>
+<p>Il secondo oggetto è il “barile”, un semplice cilindro realizzato con Blender, a cui poi è stata applicata una texture per far in modo che questo risalti rispetto al resto della scena e sia ben visibile.</p>
+<p>Per importare le mesh nella scena viene utilizzata la funzione <i>loadObj</i> presente nel file <i>utils.</i></p>
+<h2>Texture</h2>
+<p>Ad ogni oggetto presente nella scena è stata applicata una texture.</p>
+<p>Per l’implementazione delle texture sono partito dal codice di esempio fornito a lezione.</p>
+<p>Le texture sono state create con l’ausilio delle funzioni “gl.createTexture()” e “gl.texImage2D()” fornite da Web-GL, che se possibile applica alle immagini la tecnica del “mipmap”. In caso contrario, vengono impostati dei parametri predefiniti per la sua gestione.</p>
+<p>Il “nemico” in fine è stato realizzato applicando all’oggetto sfera una mia foto come texture (come richiesto dalla consegna).</p>
+<img src="sc2.png">
+<h2>Luci e Ombre</h2>
+<p>Ho cercato di ricreare una luce quanto più naturale possibile, ponendo una fonte di luce al di sopra della scena. La luce è direzionale e sfrutta una depth_texture che utilizzando le coordinate di profondità riesce a calcolare quali oggetti sono in ombra (e da che lato).</p>
+<p>L’utente può modificare la posizione della fonte di luce rispetto ai suoi assi.</p>
+<p>Ho stabilito un bias atto a limitare l’effetto di pixelatura delle ombre noto come “shadow acne”</p>
+<p>L’utente ha anche la possibilità di non renderizzare le ombre, in modo da alleggerire il carico di lavoro della macchina in caso si voglia eseguire il gioco su computer meno performanti.</p>
+<p>Il problema della scelta di illuminare la scena tramite questa tecnica è nelle ombre che risultano leggermente pixelate (nonostante il bias molto basso).<br>
+Questo è dovuto al basso numero di poligoni degli oggetti che risultano dunque ancor meno smussati con le ombre attive.</p>
+<p>Per migliorare l’effetto visivo, si potrebbe alzare il numero di poligoni o (in alternativa) si potrebbe implementare un algoritmo performante di shading in grado di raffinare la forma delle ombre.</p>
+<h2>Movimento e Collisioni</h2>
+<p>Il movimento della mucca all’interno della scena è stato gestito partendo dal file cg-car2.js visto durante il corso.</p>
+<p>La fisica utilizzata per il movimento è una versione semplificata della funzione di animazione della macchina, senza dover però gestire le ruote.</p>
+<p>Il movimento all’interno della mappa è caratterizzato da alcune collisioni.</p>
+<p>Utilizzando la posizione del personaggio che si sta controllando si può determinare se si è entrati in collisione con il nemico che ci insegue o meno.</p>
+<p>La posizione del personaggio giocabile è stata inoltre sfruttata per creare l’algoritmo di inseguimento usato dal nemico, che controllando la posizione della mucca sugli assi x e z, aggiorna la sua direzione sugli assi, andando a modificare la posizione del nemico ad ogni frame.</p>
+<p>Sono state implementi due tipi collissioni:</p>
+<ul>
+</ul><li>collisione con il nemico</li>
+<li>collisione con i barili</li>
+
+<p>Quando il nemico ti prende, il gioco va in uno stato di game over, e tramite lo spawn dell’apposita schermata è possibile riniziare la partita.</p>
+<img src="sc3.png">
+<p>La collisione con i barili invece, porta allo scomparire di questi ultimi. Una volta raccolti tutti, tramite degli appositi controlli, si determina la vittoria del giocatore. Anche in questo caso viene mostrata a schermo una vista che comunica al giocatore il suo successo e viene data la possibilità  a questo di ricominciare.</p>
+<img src="sc4.png">
+<p>I barili nella scena ruotano attorno all’asse y e all’asse x con una funzione fornita dalla libreria “m4.js”:<br>
+“m4.yRotate(m, angleInRadians, dst)”<br>
+“m4.xRotate(m, angleInRadians, dst)”</p>
+<h2>Interazione con l'interfaccia</h2>
+<p>Si distinguono due tipi di interazioni:</p>
+<ul>
+	<li>Interazione di gioco</li>
+	<li>Interazione con il menu</li>
+</ul>
+<p>Le interazioni di gioco sono possibili</p>
+<ul>
+	<li>Attraverso la tastiera</li>
+	<li>Attraverso il mouse</li>
+	<li>Attraverso il touchscreen (nel caso mobile)</li>
+</ul>
+<h3>Desktop</h3>
+<img src="sc1.png">
+<p>Eseguendo il programma su computer, per muovere la mucca è necessario utilizzare i tasti W,A,S,D (convenzione generale utilizzata nei giochi che sfruttano mouse e tastiera come fonte di input)</p>
+<p>La camera può essere gestita tramite frecce direzionali e tramite il mouse. Usando inoltre la rotella del mouse si può allontanare o avvicinare la camera al personaggio.</p>
+<p>L’interfaccia presenta un pannello sulla destra con vari bottoni e sliders. Questi permettono di posizionare la camera in tre modalità distinte:<br>
+- Posteriore<br>
+- Frontale<br>
+- Isometrica</p>
+
+<img src="sc5.png">
+<p>Gli slider forniscono la possibilità (come già detto in precedenza) di spostare la sorgente della luce sugli assi x, z e y.<br>
+Ovviamente, l’uso di questa funzione risulta più di impatto con le ombre abilitate. È infatti possibile selezionare se visualizzare o meno.</p>
+<h3>Versione Mobile</h3>
+<img src="sc6.png">
+<p>Per permettere all’utente di usare l’applicazione anche da smartphone, sono stati inseriti sulla scena delle immagini (prese da google immagini) rappresentanti il layout dei tasti “WASD”  e “arrowUp, arrowLeft, arrowDown, arrowRight” sulla tastiera.</p>
+<p>Sono stati poi posizionati sul canvas rispettivamente sulla sinistra e sulla destra, pensando a simulare un controller, dove con il pollice destro muoviamo il personaggio e con il sinistro gestiamo la camera.</p>
+<h1 id="particolarità-e-sviluppi-futuri">Particolarità e Sviluppi futuri</h1>
+<p>La particolarità del software risiede nella meccanica di inseguimento proposta. Infatti il gioco risulta ben bilanciato con la velocità del nemico rispetto alla propria, ritrovandosi in più occasioni a ritrovarsi con la strada tagliata dal nemico, risultando in un game over.</p>
+<p>La posizione dei barili, così come lo spawn del nemico vengono generati casualmente ad ogni inizio della partita.</p>
+<p>Per migliorare il software in futuro si potrebbero implementare le seguenti feature:</p>
+<ul>
+<li>una serie di ostacoli da evitare per forzare il giocatore a spostarsi in modo più complesso</li>
+<li>una animazione per la mucca in modo da rendere il suo movimento più fluido.</li>
+<li>la sostituzione della sfera rappresentante il nemico con un altro obj più interessante.</li>
+</ul>
+</div>
+</body>
+
+</html>
