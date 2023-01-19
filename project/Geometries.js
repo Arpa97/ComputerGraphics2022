@@ -206,19 +206,6 @@ function loadFolder() {
 }
 
 
-function loadCube() {
-    //cubo
-    loadObj("resources/obj/computer.obj")
-    const cube_array = {
-        position: {numComponents: 3, data:webglVertexData[0],},
-        texcoord: {numComponents: 2,data:webglVertexData[1],},
-        normal: {numComponents: 3, data:webglVertexData[2],},
-    }
-    bufferInfo_cube = webglUtils.createBufferInfoFromArrays(gl, cube_array)
-    //texture_cube = loadTextureFromImg("resources/images/macbookbis.png")
-}
-
-
 
 function loadSphere() {
     loadObj("resources/obj/sphere.obj")
