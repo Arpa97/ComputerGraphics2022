@@ -1,20 +1,15 @@
 //Buffers degli Obj
 let bufferInfo_sphere
-let bufferInfo_cube
 let bufferInfo_skybox
 let bufferInfo_floor
 let bufferInfo_cow
-let bufferInfo_rotella
 let bufferInfo_folder
 //Buffers delle texture
 let texture_sphere
-let texture_cube
 let texture_skybox
 let texture_cow
 let texture_floor
-let texture_rotella
 let texture_folder
-let texture_foto
 let texture_face
 
 function setGeo(gl) {
