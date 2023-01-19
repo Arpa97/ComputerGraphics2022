@@ -1,6 +1,5 @@
 //Buffers degli Obj
 let bufferInfo_sphere
-let bufferInfo_cube
 let bufferInfo_skybox
 let bufferInfo_floor
 let bufferInfo_cow
@@ -12,7 +11,6 @@ let texture_skybox
 let texture_cow
 let texture_floor
 let texture_folder
-let texture_face
 
 function setGeo(gl) {
     loadSphere()
