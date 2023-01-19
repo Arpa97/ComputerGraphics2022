@@ -19,7 +19,6 @@ let texture_face
 
 function setGeo(gl) {
     loadSphere()
-    loadCube()
     loadFolder()
     loadCow()
     loadFloor()
