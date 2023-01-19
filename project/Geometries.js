@@ -10,7 +10,6 @@ let texture_skybox
 let texture_cow
 let texture_floor
 let texture_folder
-let texture_face
 
 function setGeo(gl) {
     loadSphere()
